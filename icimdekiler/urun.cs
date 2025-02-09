@@ -27,6 +27,9 @@ namespace icimdekiler
             barkodLabel.Text = barkodNo;
             urunLabel.Text = urunAdi;
             icindekilerLabel.Text = icindekiler;
+            icindekilerLabel.AutoSize = false;
+            icindekilerLabel.TextAlign = ContentAlignment.TopLeft;
+            icindekilerLabel.Click += icindekilerLabel_Click;
         }
 
 
@@ -37,59 +40,52 @@ namespace icimdekiler
             Label clickedLabel = sender as Label;
             if (clickedLabel != null)
             {
-                // Fare konumunu al
                 Point mousePosition = clickedLabel.PointToClient(Cursor.Position);
-
-                // Tıklanan kelimeyi bul
                 string clickedWord = GetClickedWord(clickedLabel, mousePosition);
 
                 if (!string.IsNullOrEmpty(clickedWord))
                 {
-                    // Tıklanan kelimeyi MessageBox ile göster
+                    // Example: Show message box for clicked word.
                     MessageBox.Show($"{clickedWord} nedir? Açıklama burada gösterilebilir.");
                 }
             }
         }
 
-        // Fare konumuna göre Label'daki kelimeyi bulan gelişmiş metot
         private string GetClickedWord(Label label, Point mousePosition)
         {
             string labelText = label.Text;
-            string[] words = labelText.Split(' ');
+            string[] words = labelText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            float startX = 0;
+            float yOffset = 0;
+            int lineHeight = TextRenderer.MeasureText("A", label.Font).Height;
 
             using (Graphics g = label.CreateGraphics())
             {
-                float x = 0, y = 0; // Metnin başlangıç koordinatları
-                float lineHeight = TextRenderer.MeasureText("A", label.Font).Height; // Satır yüksekliği
-
                 foreach (string word in words)
                 {
-                    SizeF wordSize = g.MeasureString(word + " ", label.Font);
+                    string cleanWord = word.Trim(new char[] { '.', ',', ';', '!', '?' });
+                    Size wordSize = TextRenderer.MeasureText(cleanWord + " ", label.Font);
 
-                    // Eğer satırın sınırını geçerse, alt satıra in
-                    if (x + wordSize.Width > label.Width)
+                    if (startX + wordSize.Width > label.Width)
                     {
-                        x = 0;  // Yeni satır başlangıcı
-                        y += lineHeight; // Bir satır aşağı kay
+                        startX = 0;
+                        yOffset += lineHeight;
                     }
 
-                    // Eğer fare pozisyonu bu kelimenin içindeyse, kelimeyi döndür
-                    if (mousePosition.X >= x && mousePosition.X <= x + wordSize.Width &&
-                        mousePosition.Y >= y && mousePosition.Y <= y + lineHeight)
+                    if (mousePosition.X >= startX && mousePosition.X <= startX + wordSize.Width &&
+                        mousePosition.Y >= yOffset && mousePosition.Y <= yOffset + lineHeight)
                     {
-                        return word;
+                        return cleanWord;
                     }
-
-                    x += wordSize.Width; // Bir sonraki kelime için X'i güncelle
+                    startX += wordSize.Width;
                 }
             }
-
             return null;
-
-
-
-
-
         }
-    } 
-}
+
+    }
+
+
+    
+} 
+

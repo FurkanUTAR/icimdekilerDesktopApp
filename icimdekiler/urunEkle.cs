@@ -93,7 +93,7 @@ namespace icimdekiler
                 icindekilerTextBox.MouseDoubleClick += icindekilerTextBox_MouseDoubleClick;
             }
 
-            isMessageBoxOpen = false; // Mesaj kutusu kapandığında tekrar açılmasına izin ver
+            
         }
 
         private string GetClickedWord(RichTextBox rtb, int index)
