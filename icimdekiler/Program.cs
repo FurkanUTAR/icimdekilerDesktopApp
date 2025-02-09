@@ -16,7 +16,7 @@ namespace icimdekiler
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new adminAnaSayfa());
+            Application.Run(new Form1());
         }
     }
 }
