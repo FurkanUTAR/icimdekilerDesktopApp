@@ -28,92 +28,68 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.barkodTextBox = new System.Windows.Forms.TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(kullaniciAnaSayfa));
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.urunlerDataGridView = new System.Windows.Forms.DataGridView();
+            this.araTextBox = new System.Windows.Forms.TextBox();
+            this.araPictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.urunlerDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.araPictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // barkodTextBox
-            // 
-            this.barkodTextBox.Location = new System.Drawing.Point(326, 62);
-            this.barkodTextBox.Name = "barkodTextBox";
-            this.barkodTextBox.Size = new System.Drawing.Size(159, 20);
-            this.barkodTextBox.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label1.Location = new System.Drawing.Point(323, 187);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label1.Location = new System.Drawing.Point(258, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "palm glikoz";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Size = new System.Drawing.Size(58, 16);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Ürün Adı";
             // 
-            // label2
+            // urunlerDataGridView
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.Location = new System.Drawing.Point(323, 43);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 16);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Barkod No";
+            this.urunlerDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.urunlerDataGridView.Location = new System.Drawing.Point(12, 62);
+            this.urunlerDataGridView.Name = "urunlerDataGridView";
+            this.urunlerDataGridView.Size = new System.Drawing.Size(776, 376);
+            this.urunlerDataGridView.TabIndex = 8;
+            this.urunlerDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.urunlerDataGridView_CellDoubleClick);
             // 
-            // textBox1
+            // araTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(326, 107);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(159, 20);
-            this.textBox1.TabIndex = 3;
+            this.araTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.araTextBox.Location = new System.Drawing.Point(259, 31);
+            this.araTextBox.Multiline = true;
+            this.araTextBox.Name = "araTextBox";
+            this.araTextBox.Size = new System.Drawing.Size(238, 25);
+            this.araTextBox.TabIndex = 5;
             // 
-            // label3
+            // araPictureBox
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label3.Location = new System.Drawing.Point(323, 88);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 16);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Ürün Adı";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label4.Location = new System.Drawing.Point(323, 136);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 16);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Marka Adı";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(326, 155);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(159, 20);
-            this.textBox2.TabIndex = 5;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.araPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("araPictureBox.Image")));
+            this.araPictureBox.Location = new System.Drawing.Point(503, 31);
+            this.araPictureBox.Name = "araPictureBox";
+            this.araPictureBox.Size = new System.Drawing.Size(25, 25);
+            this.araPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.araPictureBox.TabIndex = 6;
+            this.araPictureBox.TabStop = false;
+            this.araPictureBox.Click += new System.EventHandler(this.araPictureBox_Click);
             // 
             // kullaniciAnaSayfa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.barkodTextBox);
+            this.Controls.Add(this.urunlerDataGridView);
+            this.Controls.Add(this.araPictureBox);
+            this.Controls.Add(this.araTextBox);
             this.Name = "kullaniciAnaSayfa";
-            this.Text = "kullaniciAnaSayfa";
+            this.Text = "Ana Sayfa";
+            this.Load += new System.EventHandler(this.kullaniciAnaSayfa_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.urunlerDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.araPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,12 +97,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox barkodTextBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.DataGridView urunlerDataGridView;
+        private System.Windows.Forms.PictureBox araPictureBox;
+        private System.Windows.Forms.TextBox araTextBox;
     }
 }

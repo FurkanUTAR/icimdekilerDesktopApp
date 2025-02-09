@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Data.OleDb;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,69 +18,81 @@ namespace icimdekiler
             InitializeComponent();
         }
 
-        // Label'a tıklama olayını işleyen metot
-        private void IcindekilerLabel_Click(object sender, EventArgs e)
+        OleDbConnection baglan = new OleDbConnection("Provider=Microsoft.JET.OLEDB.4.0;Data Source=icimdekilerDb.mdb");
+
+
+       
+        private void kullaniciAnaSayfa_Load(object sender, EventArgs e)
         {
-            Label clickedLabel = sender as Label;
-            if (clickedLabel != null)
-            {
-                // Fare konumunu al
-                Point mousePosition = clickedLabel.PointToClient(Cursor.Position);
-
-                // Tıklanan kelimeyi bul
-                string clickedWord = GetClickedWord(clickedLabel, mousePosition);
-
-                if (!string.IsNullOrEmpty(clickedWord))
-                {
-                    // Tıklanan kelimeyi MessageBox ile göster
-                    MessageBox.Show($"{clickedWord} nedir? Açıklama burada gösterilebilir.");
-                }
-            }
+            verileriGoster();
+        }
+        private void araPictureBox_Click(object sender, EventArgs e)
+        {
+            urunAdiAra();
+        }
+        private void urunlerDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string barkodNo = urunlerDataGridView.CurrentRow.Cells[1].Value.ToString();
+            string urunAdi = urunlerDataGridView.CurrentRow.Cells[2].Value.ToString();
+            string icindekiler = urunlerDataGridView.CurrentRow.Cells[3].Value.ToString();
+            urun urun = new urun();
+            urun.barkodNo = barkodNo;
+            urun.urunAdi = urunAdi;
+            urun.icindekiler = icindekiler;
+            urun.Show();
+            this.Hide();
+              
         }
 
-        // Fare konumuna göre Label'daki kelimeyi bulan metot
-        private string GetClickedWord(Label label, Point mousePosition)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        void verileriGoster()
         {
-            // Label'ın metnini al
-            string labelText = label.Text;
+            string sorgu = "SELECT * FROM urunler";
 
-            // Label'ın yazı tipi bilgilerini al
-            using (Graphics g = label.CreateGraphics())
-            {
-                // Metni boşluklara göre parçalara ayır
-                string[] words = labelText.Split(' ');
+            baglan.Open();
 
-                // Kelimelerin başlangıç ve bitiş konumlarını hesapla
-                float startX = 0;
-                foreach (string word in words)
-                {
-                    // Kelimenin genişliğini ölç
-                    SizeF wordSize = g.MeasureString(word + " ", label.Font);
+            OleDbDataAdapter da = new OleDbDataAdapter(sorgu, baglan);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
 
-                    // Fare konumu bu kelimenin içinde mi kontrol et
-                    if (mousePosition.X >= startX && mousePosition.X <= startX + wordSize.Width)
-                    {
-                        return word;
-                    }
+            urunlerDataGridView.DataSource = dt;
+            urunlerDataGridView.Columns["Kimlik"].Visible = false;
 
-                    // Bir sonraki kelimenin başlangıç konumunu güncelle
-                    startX += wordSize.Width;
-                }
-            }
+            baglan.Close();
+        }
+        void urunAdiAra()
+        {
+            string urunAdi = araTextBox.Text;
 
-            return null; // Fare konumu hiçbir kelimeyle eşleşmiyorsa null döner
+            string sorgu = "SELECT * FROM urunler WHERE urunAdi LIKE '%" + urunAdi + "%' ";
+
+            baglan.Open();
+
+            OleDbDataAdapter da = new OleDbDataAdapter(sorgu, baglan);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            urunlerDataGridView.DataSource = dt;
+            urunlerDataGridView.Columns["Kimlik"].Visible = false;
+
+            baglan.Close();
         }
 
-        // Label1'e tıklama olayını yönlendiren metot (isteğe bağlı)
-        private void label1_Click(object sender, EventArgs e)
-        {
-            IcindekilerLabel_Click(sender, e); // İsteğe bağlı, başka bir metodu çağırabilir
-        }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
 

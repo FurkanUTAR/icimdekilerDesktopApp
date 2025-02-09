@@ -58,8 +58,8 @@ namespace icimdekiler
                 string sorgu = "SELECT * FROM kullanicilar WHERE kullaniciAdi='" + kullaniciAdi + "' AND adSoyad='" + adSoyad + "' AND parola='" + parola + "' AND ePosta='" + ePosta + "' AND telNo='" + telNo + "'";
                 OleDbCommand komut = new OleDbCommand(sorgu,baglan);
                 OleDbDataReader oku = komut.ExecuteReader();
-                
-                if (oku.Read()) 
+
+                if (oku.Read())
                 {
                     string yetki = oku.GetString(1);
                     if (yetki == "1")
@@ -68,13 +68,14 @@ namespace icimdekiler
                         kullaniciAnaSayfa.Show();
                         this.Hide();
                     }
-                    else if (yetki == "0") 
+                    else if (yetki == "0")
                     {
                         adminAnaSayfa adminAnaSayfa = new adminAnaSayfa();
                         adminAnaSayfa.Show();
                         this.Hide();
                     }
                 }
+                else MessageBox.Show("Kullanıcı bulunamadı!!!!");
                 baglan.Close();
             }
         }
