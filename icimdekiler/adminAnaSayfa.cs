@@ -32,12 +32,14 @@ namespace icimdekiler
 
         private void urunlerDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            int kimlik=int.Parse(urunlerDataGridView.CurrentRow.Cells[0].Value.ToString());
             string barkodNo=urunlerDataGridView.CurrentRow.Cells[1].Value.ToString();
             string urunAdi=urunlerDataGridView.CurrentRow.Cells[2].Value.ToString();
             string icindekiler=urunlerDataGridView.CurrentRow.Cells[3].Value.ToString();
 
             urunEkle urunEkle = new urunEkle();
             urunEkle.durum = "guncelle";
+            urunEkle.kimlik= kimlik;
             urunEkle.barkodNo = barkodNo;
             urunEkle.urunAdi = urunAdi;
             urunEkle.icindekiler = icindekiler;

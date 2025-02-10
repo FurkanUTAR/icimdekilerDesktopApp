@@ -18,9 +18,12 @@ namespace icimdekiler
         OleDbConnection baglan = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=icimdekilerDb.mdb");
 
         public string durum { get; set; }
+        public int kimlik { get; set; }
         public string barkodNo { get; set; }
         public string urunAdi { get; set; }
         public string icindekiler { get; set; }
+
+        adminAnaSayfa adminAnaSayfa = new adminAnaSayfa();
 
         public urunEkle()
         {
@@ -29,7 +32,7 @@ namespace icimdekiler
 
         private void urunEkle_Load(object sender, EventArgs e)
         {
-            if (durum == "ekle") { kaydetButton.Enabled = false; guncelleButton.Enabled = true; }
+            if (durum == "ekle") { kaydetButton.Enabled = true; guncelleButton.Enabled = false; }
             else if (durum == "guncelle") 
             {
                 kaydetButton.Enabled = false; guncelleButton.Enabled = true;
@@ -44,7 +47,6 @@ namespace icimdekiler
 
         private void geriDonPictureBox_Click(object sender, EventArgs e)
         {
-            adminAnaSayfa adminAnaSayfa = new adminAnaSayfa();
             adminAnaSayfa.Show();
             this.Hide();
         }
@@ -52,6 +54,11 @@ namespace icimdekiler
         private void kaydetButton_Click(object sender, EventArgs e)
         {
             urunEkleDB();
+        }
+
+        private void guncelleButton_Click(object sender, EventArgs e)
+        {
+            urunGuncelleDB();
         }
 
         void urunEkleDB()
@@ -69,11 +76,37 @@ namespace icimdekiler
                 OleDbCommand komut = new OleDbCommand(sorgu, baglan);
                 komut.ExecuteNonQuery();
 
+               
+                adminAnaSayfa.Show();
+                this.Hide();
+
                 baglan.Close();
             }
             else MessageBox.Show("Lütfen boş alan bırakmayınız!!");
         }
 
+        void urunGuncelleDB()
+        {
+            string barkodNo = barkodTextBox.Text;
+            string urunAdi = urunAdiTextBox.Text;
+            string icindekiler = icindekilerTextBox.Text;
+
+            string sorgu = "UPDATE urunler SET barkodNo='"+barkodNo+"',urunAdi='"+urunAdi+"',icindekiler='"+icindekiler+"' WHERE Kimlik="+kimlik+" ";
+
+            if (!string.IsNullOrWhiteSpace(barkodNo) && !string.IsNullOrWhiteSpace(urunAdi) && !string.IsNullOrWhiteSpace(icindekiler))
+            {
+                baglan.Open();
+
+                OleDbCommand komut = new OleDbCommand(sorgu, baglan);
+                komut.ExecuteNonQuery();
+
+                adminAnaSayfa.Show();
+                this.Hide();
+
+                baglan.Close();
+            }
+            else MessageBox.Show("Lütfen boş alan bırakmayınız!!");
+        }
 
         private bool isMessageBoxOpen = false;
 
@@ -88,12 +121,19 @@ namespace icimdekiler
 
             if (!string.IsNullOrEmpty(clickedWord))
             {
+                // MouseDoubleClick event'ini geçici olarak kaldır
                 icindekilerTextBox.MouseDoubleClick -= icindekilerTextBox_MouseDoubleClick;
+
+                // MessageBox göster
                 MessageBox.Show($"{clickedWord} nedir? Açıklama burada gösterilebilir.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // MessageBox kapandıktan sonra isMessageBoxOpen değişkenini false yap
+                isMessageBoxOpen = false;
+
+                // MouseDoubleClick event'ini tekrar ekle
                 icindekilerTextBox.MouseDoubleClick += icindekilerTextBox_MouseDoubleClick;
             }
-
-            
+            else isMessageBoxOpen = false;
         }
 
         private string GetClickedWord(RichTextBox rtb, int index)
@@ -105,9 +145,11 @@ namespace icimdekiler
             int start = index;
             int end = index;
 
+            // Kelimenin başlangıç pozisyonunu bul
             while (start > 0 && char.IsLetterOrDigit(text[start - 1]))
                 start--;
 
+            // Kelimenin bitiş pozisyonunu bul
             while (end < text.Length && char.IsLetterOrDigit(text[end]))
                 end++;
 

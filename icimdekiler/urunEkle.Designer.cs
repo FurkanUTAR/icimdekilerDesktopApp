@@ -45,7 +45,7 @@
             // icindekilerTextBox
             // 
             this.icindekilerTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.icindekilerTextBox.Location = new System.Drawing.Point(262, 146);
+            this.icindekilerTextBox.Location = new System.Drawing.Point(258, 166);
             this.icindekilerTextBox.Name = "icindekilerTextBox";
             this.icindekilerTextBox.Size = new System.Drawing.Size(263, 142);
             this.icindekilerTextBox.TabIndex = 3;
@@ -56,7 +56,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label1.Location = new System.Drawing.Point(254, 143);
+            this.label1.Location = new System.Drawing.Point(258, 143);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 20);
             this.label1.TabIndex = 1;
@@ -130,6 +130,7 @@
             this.guncelleButton.TabIndex = 10;
             this.guncelleButton.Text = "Güncelle";
             this.guncelleButton.UseVisualStyleBackColor = true;
+            this.guncelleButton.Click += new System.EventHandler(this.guncelleButton_Click);
             // 
             // geriDonPictureBox
             // 

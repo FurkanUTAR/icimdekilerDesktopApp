@@ -48,3 +48,5 @@ C:\Users\musta\Desktop\icimdekilerDesktopApp-main\icimdekilerDesktopApp-main\ici
 C:\Users\musta\Desktop\icimdekilerDesktopApp-main\icimdekilerDesktopApp-main\icimdekiler\bin\Debug\icimdekiler.exe.config
 C:\Users\musta\Desktop\icimdekilerDesktopApp-main\icimdekilerDesktopApp-main\icimdekiler\bin\Debug\icimdekiler.exe
 C:\Users\musta\Desktop\icimdekilerDesktopApp-main\icimdekilerDesktopApp-main\icimdekiler\bin\Debug\icimdekiler.pdb
+C:\Users\furka\Desktop\icimdekiler\obj\Debug\icimdekiler.kullaniciAnaSayfa.resources
+C:\Users\furka\Desktop\icimdekiler\obj\Debug\icimdekiler.urun.resources
