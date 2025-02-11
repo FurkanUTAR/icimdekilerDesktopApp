@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.OleDb;
-using System.Diagnostics.Contracts;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace icimdekiler
@@ -32,16 +25,17 @@ namespace icimdekiler
 
         private void urunEkle_Load(object sender, EventArgs e)
         {
-            if (durum == "ekle") { kaydetButton.Enabled = true; guncelleButton.Enabled = false; }
-            else if (durum == "guncelle") 
+            icerikGoster();
+
+            if (durum == "ekle") { kaydetButton.Enabled = true; guncelleButton.Enabled = false; silButton.Enabled = false; }
+            else if (durum == "guncelle")
             {
-                kaydetButton.Enabled = false; guncelleButton.Enabled = true;
+                kaydetButton.Enabled = false; guncelleButton.Enabled = true; silButton.Enabled = true;
 
                 barkodTextBox.Text = barkodNo;
                 urunAdiTextBox.Text = urunAdi;
                 icindekilerTextBox.Text = icindekiler;
             }
-
             icindekilerTextBox.MouseDoubleClick += icindekilerTextBox_MouseDoubleClick;
         }
 
@@ -61,6 +55,16 @@ namespace icimdekiler
             urunGuncelleDB();
         }
 
+        private void silButton_Click(object sender, EventArgs e)
+        {
+            urunSilDB();
+        }
+
+        private void urunEklePictureBox_Click(object sender, EventArgs e)
+        {
+            if (urunlerComboBox.SelectedItem != null) icindekilerTextBox.Text += $"{urunlerComboBox.SelectedItem.ToString()}, "; // Seçili ürün varsa
+        }
+
         void urunEkleDB()
         {
             string barkodNo = barkodTextBox.Text;
@@ -76,7 +80,7 @@ namespace icimdekiler
                 OleDbCommand komut = new OleDbCommand(sorgu, baglan);
                 komut.ExecuteNonQuery();
 
-               
+
                 adminAnaSayfa.Show();
                 this.Hide();
 
@@ -91,7 +95,7 @@ namespace icimdekiler
             string urunAdi = urunAdiTextBox.Text;
             string icindekiler = icindekilerTextBox.Text;
 
-            string sorgu = "UPDATE urunler SET barkodNo='"+barkodNo+"',urunAdi='"+urunAdi+"',icindekiler='"+icindekiler+"' WHERE Kimlik="+kimlik+" ";
+            string sorgu = "UPDATE urunler SET barkodNo='" + barkodNo + "',urunAdi='" + urunAdi + "',icindekiler='" + icindekiler + "' WHERE Kimlik=" + kimlik + " ";
 
             if (!string.IsNullOrWhiteSpace(barkodNo) && !string.IsNullOrWhiteSpace(urunAdi) && !string.IsNullOrWhiteSpace(icindekiler))
             {
@@ -108,6 +112,42 @@ namespace icimdekiler
             else MessageBox.Show("Lütfen boş alan bırakmayınız!!");
         }
 
+        void urunSilDB()
+        {
+            string sorgu = "DELETE FROM urunler WHERE Kimlik=" + kimlik + " ";
+
+            baglan.Open();
+
+            OleDbCommand komut = new OleDbCommand(sorgu,baglan);
+            komut.ExecuteNonQuery();
+
+            adminAnaSayfa.Show();
+            this.Hide();
+
+            baglan.Close();
+        }
+
+        void icerikGoster()
+        {
+            string sorgu = "SELECT urun FROM icerik";
+
+            baglan.Open();
+
+            OleDbCommand komut = new OleDbCommand(sorgu, baglan);
+            OleDbDataReader oku = komut.ExecuteReader();
+
+            urunlerComboBox.Items.Clear(); // Önceki verileri temizle
+
+            while (oku.Read())
+            {
+                string urun = oku.GetString(0);
+                urunlerComboBox.Items.Add(urun);
+            }
+
+            oku.Close();
+            baglan.Close();
+        }
+
         private bool isMessageBoxOpen = false;
 
         private void icindekilerTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -121,17 +161,36 @@ namespace icimdekiler
 
             if (!string.IsNullOrEmpty(clickedWord))
             {
-                // MouseDoubleClick event'ini geçici olarak kaldır
-                icindekilerTextBox.MouseDoubleClick -= icindekilerTextBox_MouseDoubleClick;
 
-                // MessageBox göster
-                MessageBox.Show($"{clickedWord} nedir? Açıklama burada gösterilebilir.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string sorgu = "SELECT aciklama FROM icerik WHERE urun = @urunAdi";
 
-                // MessageBox kapandıktan sonra isMessageBoxOpen değişkenini false yap
-                isMessageBoxOpen = false;
+                baglan.Open();
 
-                // MouseDoubleClick event'ini tekrar ekle
-                icindekilerTextBox.MouseDoubleClick += icindekilerTextBox_MouseDoubleClick;
+                OleDbCommand komut = new OleDbCommand(sorgu, baglan);
+                komut.Parameters.AddWithValue("@urunAdi", clickedWord);
+                OleDbDataReader oku = komut.ExecuteReader();
+
+                if (oku.Read())
+                {
+                    string aciklama = oku.GetString(0);
+
+                    // MouseDoubleClick event'ini geçici olarak kaldır
+                    icindekilerTextBox.MouseDoubleClick -= icindekilerTextBox_MouseDoubleClick;
+
+                    // MessageBox göster
+                    MessageBox.Show($"{clickedWord} nedir? {aciklama}", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // MessageBox kapandıktan sonra isMessageBoxOpen değişkenini false yap
+                    isMessageBoxOpen = false;
+
+                    // MouseDoubleClick event'ini tekrar ekle
+                    icindekilerTextBox.MouseDoubleClick += icindekilerTextBox_MouseDoubleClick;
+                }
+                else MessageBox.Show("Seçili ürün bulunamamıştır!");
+                oku.Close();
+                baglan.Close();
+
+
             }
             else isMessageBoxOpen = false;
         }
@@ -145,15 +204,17 @@ namespace icimdekiler
             int start = index;
             int end = index;
 
-            // Kelimenin başlangıç pozisyonunu bul
-            while (start > 0 && char.IsLetterOrDigit(text[start - 1]))
+            // Kelimenin başlangıç pozisyonunu bul (Harf, rakam ve boşlukları al)
+            while (start > 0 && (char.IsLetterOrDigit(text[start - 1]) || text[start - 1] == ' '))
                 start--;
 
-            // Kelimenin bitiş pozisyonunu bul
-            while (end < text.Length && char.IsLetterOrDigit(text[end]))
+            // Kelimenin bitiş pozisyonunu bul (Harf, rakam ve boşlukları al)
+            while (end < text.Length && (char.IsLetterOrDigit(text[end]) || text[end] == ' '))
                 end++;
 
-            return text.Substring(start, end - start);
+            // Kelimenin sonundaki boşlukları temizle
+            return text.Substring(start, end - start).Trim();
         }
+
     }
 }

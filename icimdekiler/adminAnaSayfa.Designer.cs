@@ -32,9 +32,11 @@
             this.araTextBox = new System.Windows.Forms.TextBox();
             this.urunlerDataGridView = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
+            this.yenilePictureBox = new System.Windows.Forms.PictureBox();
             this.urunEklePictureBox = new System.Windows.Forms.PictureBox();
             this.araPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.urunlerDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yenilePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.urunEklePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.araPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -50,9 +52,13 @@
             // 
             // urunlerDataGridView
             // 
+            this.urunlerDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.urunlerDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.urunlerDataGridView.Location = new System.Drawing.Point(12, 62);
             this.urunlerDataGridView.Name = "urunlerDataGridView";
+            this.urunlerDataGridView.ReadOnly = true;
+            this.urunlerDataGridView.RowHeadersVisible = false;
+            this.urunlerDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.urunlerDataGridView.Size = new System.Drawing.Size(776, 376);
             this.urunlerDataGridView.TabIndex = 3;
             this.urunlerDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.urunlerDataGridView_CellDoubleClick);
@@ -66,6 +72,17 @@
             this.label1.Size = new System.Drawing.Size(58, 16);
             this.label1.TabIndex = 4;
             this.label1.Text = "Ürün Adı";
+            // 
+            // yenilePictureBox
+            // 
+            this.yenilePictureBox.Image = global::icimdekiler.Properties.Resources.refresh;
+            this.yenilePictureBox.Location = new System.Drawing.Point(772, 3);
+            this.yenilePictureBox.Name = "yenilePictureBox";
+            this.yenilePictureBox.Size = new System.Drawing.Size(25, 25);
+            this.yenilePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.yenilePictureBox.TabIndex = 5;
+            this.yenilePictureBox.TabStop = false;
+            this.yenilePictureBox.Click += new System.EventHandler(this.yenilePictureBox_Click);
             // 
             // urunEklePictureBox
             // 
@@ -94,15 +111,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.yenilePictureBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.urunlerDataGridView);
             this.Controls.Add(this.urunEklePictureBox);
             this.Controls.Add(this.araPictureBox);
             this.Controls.Add(this.araTextBox);
             this.Name = "adminAnaSayfa";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ana Sayfa";
             this.Load += new System.EventHandler(this.adminAnaSayfa_Load);
             ((System.ComponentModel.ISupportInitialize)(this.urunlerDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yenilePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.urunEklePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.araPictureBox)).EndInit();
             this.ResumeLayout(false);
@@ -117,5 +137,6 @@
         private System.Windows.Forms.PictureBox urunEklePictureBox;
         private System.Windows.Forms.DataGridView urunlerDataGridView;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox yenilePictureBox;
     }
 }

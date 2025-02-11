@@ -181,6 +181,7 @@
             this.Controls.Add(this.adSoyadTextBox);
             this.Controls.Add(this.kullaniciAdiTextBox);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Giriş Yap";
             this.ResumeLayout(false);
             this.PerformLayout();

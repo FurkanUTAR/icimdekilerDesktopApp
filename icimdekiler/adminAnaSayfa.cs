@@ -30,6 +30,22 @@ namespace icimdekiler
             urunAdiAra();
         }
 
+        private void yenilePictureBox_Click(object sender, EventArgs e)
+        {
+            string sorgu = "SELECT * FROM urunler";
+
+            baglan.Open();
+
+            OleDbDataAdapter da = new OleDbDataAdapter(sorgu, baglan);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            urunlerDataGridView.DataSource = dt;
+            urunlerDataGridView.Columns["Kimlik"].Visible = false;
+
+            baglan.Close();
+        }
+
         private void urunlerDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             int kimlik=int.Parse(urunlerDataGridView.CurrentRow.Cells[0].Value.ToString());

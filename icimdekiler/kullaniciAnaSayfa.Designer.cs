@@ -86,6 +86,7 @@
             this.Controls.Add(this.araPictureBox);
             this.Controls.Add(this.araTextBox);
             this.Name = "kullaniciAnaSayfa";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ana Sayfa";
             this.Load += new System.EventHandler(this.kullaniciAnaSayfa_Load);
             ((System.ComponentModel.ISupportInitialize)(this.urunlerDataGridView)).EndInit();

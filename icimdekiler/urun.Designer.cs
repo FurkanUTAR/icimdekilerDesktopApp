@@ -83,6 +83,7 @@
             this.Controls.Add(this.urunLabel);
             this.Controls.Add(this.barkodLabel);
             this.Name = "urun";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ürün";
             this.Load += new System.EventHandler(this.urun_Load);
             this.ResumeLayout(false);

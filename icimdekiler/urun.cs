@@ -13,6 +13,8 @@ namespace icimdekiler
 {
     public partial class urun : Form
     {
+        OleDbConnection baglan = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=icimdekilerDb.mdb");
+
         public string barkodNo { get; set; }
         public string urunAdi { get; set; }
         public string icindekiler { get; set; }
@@ -27,12 +29,11 @@ namespace icimdekiler
             barkodLabel.Text = barkodNo;
             urunLabel.Text = urunAdi;
             icindekilerLabel.Text = icindekiler;
+
             icindekilerLabel.AutoSize = false;
             icindekilerLabel.TextAlign = ContentAlignment.TopLeft;
             icindekilerLabel.Click += icindekilerLabel_Click;
         }
-
-
 
         // Label'a tıklama olayını işleyen metot
         private void icindekilerLabel_Click(object sender, EventArgs e)
@@ -45,8 +46,25 @@ namespace icimdekiler
 
                 if (!string.IsNullOrEmpty(clickedWord))
                 {
-                    // Example: Show message box for clicked word.
-                    MessageBox.Show($"{clickedWord} nedir? Açıklama burada gösterilebilir.");
+                    string sorgu = "SELECT aciklama FROM icerik WHERE urun = @urunAdi";
+
+                    baglan.Open();
+                    OleDbCommand komut = new OleDbCommand(sorgu, baglan);
+                    komut.Parameters.AddWithValue("@urunAdi", clickedWord);
+                    OleDbDataReader oku = komut.ExecuteReader();
+
+                    if (oku.Read())
+                    {
+                        string aciklama = oku.GetString(0);
+                        MessageBox.Show($"{clickedWord} nedir? {aciklama}", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Seçili ürün bulunamamıştır!");
+                    }
+
+                    oku.Close();
+                    baglan.Close();
                 }
             }
         }
@@ -54,38 +72,40 @@ namespace icimdekiler
         private string GetClickedWord(Label label, Point mousePosition)
         {
             string labelText = label.Text;
-            string[] words = labelText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            float startX = 0;
-            float yOffset = 0;
-            int lineHeight = TextRenderer.MeasureText("A", label.Font).Height;
+            string[] words = labelText.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
 
             using (Graphics g = label.CreateGraphics())
             {
+                float currentX = 0;
+                float currentY = 0;
+                int lineHeight = TextRenderer.MeasureText("A", label.Font).Height + 5;
+
                 foreach (string word in words)
                 {
                     string cleanWord = word.Trim(new char[] { '.', ',', ';', '!', '?' });
-                    Size wordSize = TextRenderer.MeasureText(cleanWord + " ", label.Font);
+                    SizeF wordSize = g.MeasureString(cleanWord, label.Font);
 
-                    if (startX + wordSize.Width > label.Width)
+                    if (currentX + wordSize.Width > label.Width)
                     {
-                        startX = 0;
-                        yOffset += lineHeight;
+                        currentX = 0;
+                        currentY += lineHeight;
                     }
 
-                    if (mousePosition.X >= startX && mousePosition.X <= startX + wordSize.Width &&
-                        mousePosition.Y >= yOffset && mousePosition.Y <= yOffset + lineHeight)
+                    // Kelime sınırlarını hesapla
+                    RectangleF wordRect = new RectangleF(currentX, currentY, wordSize.Width, wordSize.Height);
+
+                    // Tıklanan nokta kelime sınırları içindeyse, kelimeyi döndür
+                    if (mousePosition.X >= wordRect.Left && mousePosition.X <= wordRect.Right &&
+                        mousePosition.Y >= wordRect.Top && mousePosition.Y <= wordRect.Bottom)
                     {
                         return cleanWord;
                     }
-                    startX += wordSize.Width;
+
+                    currentX += wordSize.Width + 8;
                 }
             }
             return null;
         }
-
     }
-
-
-    
 } 
 

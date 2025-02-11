@@ -173,6 +173,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.kullaniciAdiTextBox);
             this.Name = "kayitOl";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kayıt Ol";
             this.ResumeLayout(false);
             this.PerformLayout();
